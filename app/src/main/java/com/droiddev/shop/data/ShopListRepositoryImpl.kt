@@ -7,13 +7,13 @@ import com.droiddev.shop.domain.ShopListRepository
 
 object ShopListRepositoryImpl : ShopListRepository {
 
-    private val shopList = mutableListOf<ShopItem>()
+    private val shopList = sortedSetOf<ShopItem>({ o1, o2 -> o1.id.compareTo(o2.id) })
     private val shopListLD = MutableLiveData<List<ShopItem>>()
 
     private var autoIncrementId = 0
 
     init {
-        for (i in 0 until 10){
+        for (i in 0 until 1100) {
             val item = ShopItem("Name $i", i, true)
             addShopItem(item)
         }
@@ -47,7 +47,8 @@ object ShopListRepositoryImpl : ShopListRepository {
         shopList.remove(oldElement)
         addShopItem(shopItem)
     }
-    private fun updateList(){
+
+    private fun updateList() {
         shopListLD.value = shopList.toList()
     }
 }
