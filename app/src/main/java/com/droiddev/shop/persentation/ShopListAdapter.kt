@@ -1,21 +1,15 @@
 package com.droiddev.shop.persentation
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.droiddev.shop.R
 import com.droiddev.shop.domain.ShopItem
 
-class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
+class ShopListAdapter :
+    ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCallback()) {
 
-    var shopList = listOf<ShopItem>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+//    val differ = AsyncListDiffer(this, ShopItemDiffCallback())
 
     var onShopItemLongClick: ((ShopItem) -> Unit)? = null
     var onShopItemClick: ((ShopItem) -> Unit)? = null
@@ -34,7 +28,7 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
     }
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
-        val shopItem = shopList[position]
+        val shopItem = getItem(position)
         holder.tv1.text = shopItem.name
         holder.tv2.text = shopItem.count.toString()
         holder.itemView.setOnLongClickListener {
@@ -46,30 +40,13 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         }
     }
 
-    override fun onViewRecycled(holder: ShopItemViewHolder) {
-        super.onViewRecycled(holder)
-        holder.tv1.text = ""
-        holder.tv2.text = ""
-        holder.tv1.setTextColor(ContextCompat.getColor(holder.itemView.context,
-            android.R.color.white))
-    }
-
-    override fun getItemCount(): Int {
-        return shopList.size
-    }
-
     override fun getItemViewType(position: Int): Int {
-        val item = shopList[position]
+        val item = getItem(position)
         return if (item.enabled) {
             VIEW_TYPE_ENABLED
         } else {
             VIEW_TYPE_DISABLED
         }
-    }
-
-    class ShopItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tv1 = view.findViewById<TextView>(R.id.tv_name)
-        val tv2 = view.findViewById<TextView>(R.id.tv_count)
     }
 
     companion object {
