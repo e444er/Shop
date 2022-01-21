@@ -12,9 +12,17 @@ import androidx.lifecycle.ViewModelProvider
 import com.droiddev.shop.R
 import com.droiddev.shop.domain.ShopItem
 import com.google.android.material.textfield.TextInputLayout
+import javax.inject.Inject
 
 class ShowItemActivity : AppCompatActivity() {
     private lateinit var viewModel: ShopItemViewModel
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (application as ShopApplication).component
+    }
 
     private lateinit var tilName: TextInputLayout
     private lateinit var tilCount: TextInputLayout
@@ -27,9 +35,10 @@ class ShowItemActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        component.inject(this)
         setContentView(R.layout.activity_show_item)
         parseIntent()
-        viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
+        viewModel = ViewModelProvider(this,viewModelFactory)[ShopItemViewModel::class.java]
         initViews()
         addTextChangeListeners()
         launchRightMode()

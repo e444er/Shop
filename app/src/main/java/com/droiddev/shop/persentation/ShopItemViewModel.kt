@@ -3,19 +3,17 @@ package com.droiddev.shop.persentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.droiddev.shop.data.ShopListRepositoryImpl
 import com.droiddev.shop.domain.AddShopItemUseCase
 import com.droiddev.shop.domain.EditShopItemUseCase
 import com.droiddev.shop.domain.GetShopItemUseCase
 import com.droiddev.shop.domain.ShopItem
+import javax.inject.Inject
 
-class ShopItemViewModel : ViewModel() {
-
-    private val repository = ShopListRepositoryImpl
-
-    private val getShopItemUseCase = GetShopItemUseCase(repository)
-    private val addShopItemUseCase = AddShopItemUseCase(repository)
-    private val editShopItemUseCase = EditShopItemUseCase(repository)
+class ShopItemViewModel @Inject constructor(
+    private val getShopItemUseCase: GetShopItemUseCase,
+    private val addShopItemUseCase: AddShopItemUseCase,
+    private val editShopItemUseCase: EditShopItemUseCase
+) : ViewModel() {
 
     private val _errorInputName = MutableLiveData<Boolean>()
     val errorInputName: LiveData<Boolean>
@@ -87,11 +85,11 @@ class ShopItemViewModel : ViewModel() {
         return result
     }
 
-     fun resetErrorInputName() {
+    fun resetErrorInputName() {
         _errorInputName.value = false
     }
 
-     fun resetErrorInputCount() {
+    fun resetErrorInputCount() {
         _errorInputCount.value = false
     }
 
