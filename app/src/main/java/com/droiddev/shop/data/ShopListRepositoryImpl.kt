@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.droiddev.shop.domain.ShopItem
 import com.droiddev.shop.domain.ShopListRepository
+import javax.inject.Inject
 
-object ShopListRepositoryImpl : ShopListRepository {
+class ShopListRepositoryImpl @Inject constructor() : ShopListRepository {
 
     private val shopList = sortedSetOf<ShopItem>({ o1, o2 -> o1.id.compareTo(o2.id) })
     private val shopListLD = MutableLiveData<List<ShopItem>>()
